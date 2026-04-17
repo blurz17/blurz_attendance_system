@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Blurz_Book</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0e27;
+        }
+        table {
+            border-spacing: 0;
+        }
+        td {
+            padding: 0;
+        }
+        img {
+            border: 0;
+            display: block;
+        }
+        .wrapper {
+            width: 100%;
+            table-layout: fixed;
+            background-color: #0a0e27;
+            padding: 20px 0;
+        }
+        .main {
+            background: linear-gradient(180deg, #1a1f3a 0%, #0f1729 100%);
+            margin: 0 auto;
+            width: 100%;
+            max-width: 600px;
+            border-spacing: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e0e7ff;
+            box-shadow: 0 8px 32px rgba(79, 70, 229, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 100%);
+            padding: 40px;
+            text-align: center;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.5);
+        }
+        .logo {
+            width: 180px;
+            height: auto;
+            margin: 0 auto;
+            filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4));
+        }
+        .content {
+            padding: 50px 40px;
+            line-height: 1.8;
+        }
+        .content h1 {
+            color: #a78bfa;
+            font-size: 28px;
+            margin: 0 0 24px 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .content p {
+            margin: 0 0 18px 0;
+            font-size: 15px;
+            color: #c7d2fe;
+        }
+        .button-container {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .button {
+            background: linear-gradient(135deg, #1e40af 0%, #6b21a8 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 48px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            border: 1px solid rgba(139, 92, 246, 0.5);
+        }
+        .features {
+            background: rgba(30, 58, 138, 0.1);
+            padding: 40px;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        .feature-item {
+            padding: 20px;
+            margin-bottom: 16px;
+            background: rgba(30, 58, 138, 0.2);
+            border-left: 3px solid #8b5cf6;
+            border-radius: 6px;
+        }
+        .feature-item:last-child {
+            margin-bottom: 0;
+        }
+        .feature-title {
+            font-weight: 700;
+            color: #a78bfa;
+            font-size: 17px;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .feature-desc {
+            color: #c7d2fe;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.6;
+        }
+        .footer {
+            background: linear-gradient(180deg, #0f1729 0%, #0a0e27 100%);
+            color: #94a3b8;
+            padding: 40px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer a {
+            color: #8b5cf6;
+            text-decoration: none;
+        }
+        .social-links {
+            padding: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 12px;
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #8b5cf6 50%, transparent 100%);
+            margin: 20px 0;
+        }
+        @media screen and (max-width: 600px) {
+            .content, .header, .features, .footer {
+                padding: 24px !important;
+            }
+            .content h1 {
+                font-size: 22px !important;
+            }
+            .button {
+                padding: 14px 32px !important;
+                font-size: 14px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <center class="wrapper">
+        <table class="main" width="100%">
+            <!-- Header with Logo -->
+            <tr>
+                <td class="header">
+                    <img src="https://via.placeholder.com/180x60/1e3a8a/a78bfa?text=BLURZ+BOOK" alt="Blurz_Book Logo" class="logo">
+                </td>
+            </tr>
+            
+            <!-- Main Content -->
+            <tr>
+                <td class="content">
+                    <h1>Welcome to Blurz_Book</h1>
+                    <p>Hello there! 👋</p>
+                    <p>We're thrilled to have you join the Blurz_Book community! Get ready to experience a revolutionary platform designed to connect, inspire, and empower you in ways you've never imagined.</p>
+                    <p>Your journey starts now. Explore cutting-edge features, connect with like-minded individuals, and unlock endless possibilities.</p>
+                    
+                    <div class="button-container">
+                        <a href="#" class="button">Get Started</a>
+                    </div>
+                </td>
+            </tr>
+            
+            <!-- Features Section -->
+            <tr>
+                <td class="features">
+                    <div class="feature-item">
+                        <p class="feature-title">⚡ Lightning-Fast Experience</p>
+                        <p class="feature-desc">Enjoy seamless navigation and instant loading with our next-generation infrastructure built for speed and performance.</p>
+                    </div>
+                    <div class="feature-item">
+                        <p class="feature-title">🔒 Privacy First</p>
+                        <p class="feature-desc">Your data is protected with military-grade encryption. We prioritize your privacy and security above all else.</p>
+                    </div>
+                    <div class="feature-item">
+                        <p class="feature-title">🌐 Global Community</p>
+                        <p class="feature-desc">Connect with millions of users worldwide. Share ideas, collaborate, and build meaningful relationships.</p>
+                    </div>
+                </td>
+            </tr>
+            
+            <!-- Footer -->
+            <tr>
+                <td class="footer">
+                    <div class="divider"></div>
+                    <div class="social-links">
+                        <a href="#">TWITTER</a> | 
+                        <a href="#">INSTAGRAM</a> | 
+                        <a href="#">DISCORD</a>
+                    </div>
+                    <p style="margin: 16px 0; color: #94a3b8;">
+                        &copy; 2024 Blurz_Book. All Rights Reserved.
+                    </p>
+                    <p style="margin: 12px 0; color: #64748b;">
+                        Building the future of social connection
+                    </p>
+                    <div class="divider"></div>
+                    <p style="margin: 16px 0 0 0; font-size: 12px; color: #64748b;">
+                        <a href="#" style="color: #8b5cf6;">Unsubscribe</a> | 
+                        <a href="#" style="color: #8b5cf6;">Preferences</a> | 
+                        <a href="#" style="color: #8b5cf6;">Help Center</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>
