@@ -15,7 +15,7 @@ async def seed_database():
         # 1. Create a System Admin (for Admin Panel)
         admin_email = "admin@blurz.com"
         result = await session.exec(select(SystemAdmin).where(SystemAdmin.email == admin_email))
-        if not result.scalar_one_or_none():
+        if not result.one_or_none():
             admin = SystemAdmin(
                 email=admin_email,
                 full_name="System Administrator",
@@ -27,7 +27,7 @@ async def seed_database():
         # 2. Create Department & Section
         dept_name = "Computer Science"
         result = await session.exec(select(Department).where(Department.name == dept_name))
-        dept = result.scalar_one_or_none()
+        dept = result.one_or_none()
         if not dept:
             dept = Department(name=dept_name)
             session.add(dept)
@@ -35,7 +35,7 @@ async def seed_database():
             
         section_name = "CS-A"
         result = await session.exec(select(Section).where(Section.name == section_name))
-        section = result.scalar_one_or_none()
+        section = result.one_or_none()
         if not section:
             section = Section(name=section_name)
             session.add(section)
@@ -44,7 +44,7 @@ async def seed_database():
         # 3. Create a Professor (for Instructor Panel)
         prof_email = "prof@blurz.com"
         result = await session.exec(select(User).where(User.email == prof_email))
-        if not result.scalar_one_or_none():
+        if not result.one_or_none():
             prof_user = User(
                 university_id="P12345",
                 id_card="CARD_P12345",
@@ -77,7 +77,7 @@ async def seed_database():
         # 4. Create a Student (for Student Panel)
         student_email = "student@blurz.com"
         result = await session.exec(select(User).where(User.email == student_email))
-        if not result.scalar_one_or_none():
+        if not result.one_or_none():
             student_user = User(
                 university_id="S12345",
                 id_card="CARD_S12345",
