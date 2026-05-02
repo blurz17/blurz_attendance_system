@@ -64,7 +64,7 @@ async def login_user(
     if not verify_password(user_data.password, user.hashed_password):
         raise InvalidCredentials()
 
-    payload = {"email": user.email, "id": str(user.id), "role": user.role}
+    payload = {"email": user.email, "id": str(user.id), "role": user.role.value}
     access_token = create_jwt_token(user_data=payload, expire=ACCESS_TTL)
     refresh_token = create_jwt_token(user_data=payload, expire=REFRESH_TTL, refresh=True)
 
@@ -74,7 +74,7 @@ async def login_user(
         "refresh_token": refresh_token,
         "user_id": str(user.id),
         "email": user.email,
-        "role": user.role,
+        "role": user.role.value,
     })
 
 
