@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Tests
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Dev tools
+.git/
+.gitignore
+*.md
+
+# Local env files (will be passed via --env-file or secrets)
+.env
+
+# IDE
+.vscode/
+.idea/
