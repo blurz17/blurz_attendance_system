@@ -1,11 +1,17 @@
+import re
 from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
 from .config import config
 
+def _clean_db_url(url: str) -> str:
+    """Strip ssl/sslmode params from URL — asyncpg needs them via connect_args."""
+    return re.sub(r'[?&]ssl(mode)?=[^&]*', '', url).rstrip('?')
+
 engine = create_async_engine(
-    config.DB_URL,
-    echo=True,  
+    _clean_db_url(config.DB_URL),
+    connect_args={"ssl": True},  # Required for Neon
+    echo=False,
     future=True
 )
 
