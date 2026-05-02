@@ -53,10 +53,17 @@ def do_run_migrations(connection) -> None:
 async def run_async_migrations() -> None:
     """Run migrations in 'online' mode with an async engine."""
     from sqlalchemy.ext.asyncio import create_async_engine
+    import re
 
-    # Use the URL set from app_config.DB_URL (asyncpg driver)
+    # asyncpg doesn't accept sslmode/ssl in the URL — strip it and pass via connect_args
     url = alembic_cfg.get_main_option("sqlalchemy.url")
-    connectable = create_async_engine(url, poolclass=pool.NullPool)
+    url = re.sub(r'[?&]ssl(mode)?=[^&]*', '', url).rstrip('?')
+
+    connectable = create_async_engine(
+        url,
+        connect_args={"ssl": True},  # Neon requires SSL
+        poolclass=pool.NullPool,
+    )
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
