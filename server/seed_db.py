@@ -16,7 +16,8 @@ async def seed_database():
         for i in range(1, 11):
             admin_email = f"admin{i}@blurz.com" if i > 1 else "admin@blurz.com"
             result = await session.exec(select(SystemAdmin).where(SystemAdmin.email == admin_email))
-            if not result.one_or_none():
+            admin = result.one_or_none()
+            if not admin:
                 admin = SystemAdmin(
                     email=admin_email,
                     full_name=f"System Administrator {i}",
@@ -24,6 +25,10 @@ async def seed_database():
                 )
                 session.add(admin)
                 print(f"✅ Created System Admin: {admin_email} / Admin123!")
+            else:
+                admin.hashed_password = generate_hashed_password("Admin123!")
+                session.add(admin)
+                print(f"🔄 Reset System Admin: {admin_email} / Admin123!")
 
         # 2. Create Department & Section
         dept_name = "Computer Science"
@@ -46,7 +51,8 @@ async def seed_database():
         for i in range(1, 11):
             prof_email = f"prof{i}@blurz.com" if i > 1 else "prof@blurz.com"
             result = await session.exec(select(User).where(User.email == prof_email))
-            if not result.one_or_none():
+            prof_user = result.one_or_none()
+            if not prof_user:
                 prof_user = User(
                     university_id=f"P12345{i}",
                     id_card=f"CARD_P12345{i}",
@@ -75,12 +81,18 @@ async def seed_database():
                 # Link course to professor
                 session.add(CourseProfessor(course_id=course.id, professor_id=prof.id))
                 print(f"✅ Created Course: {course.name}")
+            else:
+                prof_user.hashed_password = generate_hashed_password("Prof123!")
+                prof_user.is_active = True
+                session.add(prof_user)
+                print(f"🔄 Reset Professor: {prof_email} / Prof123!")
 
         # 4. Create 10 Students (for Student Panel)
         for i in range(1, 11):
             student_email = f"student{i}@blurz.com" if i > 1 else "student@blurz.com"
             result = await session.exec(select(User).where(User.email == student_email))
-            if not result.one_or_none():
+            student_user = result.one_or_none()
+            if not student_user:
                 student_user = User(
                     university_id=f"S12345{i}",
                     id_card=f"CARD_S12345{i}",
@@ -101,6 +113,11 @@ async def seed_database():
                 )
                 session.add(student)
                 print(f"✅ Created Student: {student_email} / Student123!")
+            else:
+                student_user.hashed_password = generate_hashed_password("Student123!")
+                student_user.is_active = True
+                session.add(student_user)
+                print(f"🔄 Reset Student: {student_email} / Student123!")
 
         await session.commit()
         print("🎉 Database seeding complete!")
