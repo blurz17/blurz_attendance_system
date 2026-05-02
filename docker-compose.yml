@@ -1,21 +1,5 @@
 services:
   # ─────────────────────────────────────────────────────────────────────────
-  # Alembic Migrations (runs once then exits)
-  # Uses external Neon PostgreSQL — no local postgres container needed
-  # ─────────────────────────────────────────────────────────────────────────
-  migrate:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: blurz_migrate
-    command: ["alembic", "upgrade", "head"]
-    env_file:
-      - ./server/.env.docker
-    networks:
-      - blurz_network
-    restart: "no"
-
-  # ─────────────────────────────────────────────────────────────────────────
   # FastAPI Application
   # ─────────────────────────────────────────────────────────────────────────
   api:
@@ -28,9 +12,6 @@ services:
       - ./server/.env.docker
     ports:
       - "8000:8000"
-    depends_on:
-      migrate:
-        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -42,7 +23,6 @@ services:
 
   # ─────────────────────────────────────────────────────────────────────────
   # Celery Worker
-  # Uses external Upstash Redis as broker
   # ─────────────────────────────────────────────────────────────────────────
   celery_worker:
     build:
@@ -53,40 +33,6 @@ services:
     command: ["celery", "-A", "core.services.celery.celery_config", "worker", "--loglevel=info", "--concurrency=2"]
     env_file:
       - ./server/.env.docker
-    networks:
-      - blurz_network
-
-  # ─────────────────────────────────────────────────────────────────────────
-  # Celery Beat (Scheduler — uncomment if you use periodic tasks)
-  # ─────────────────────────────────────────────────────────────────────────
-  # celery_beat:
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #   container_name: blurz_celery_beat
-  #   restart: unless-stopped
-  #   command: ["celery", "-A", "core.services.celery.celery_config", "beat", "--loglevel=info"]
-  #   env_file:
-  #     - ./server/.env.docker
-  #   networks:
-  #     - blurz_network
-
-  # ─────────────────────────────────────────────────────────────────────────
-  # Flower — Celery monitoring UI (optional, remove in strict prod)
-  # ─────────────────────────────────────────────────────────────────────────
-  flower:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: blurz_flower
-    restart: unless-stopped
-    command: ["celery", "-A", "core.services.celery.celery_config", "flower", "--port=5555"]
-    env_file:
-      - ./server/.env.docker
-    ports:
-      - "5555:5555"
-    depends_on:
-      - celery_worker
     networks:
       - blurz_network
 
