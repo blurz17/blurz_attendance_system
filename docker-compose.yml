@@ -1,49 +1,7 @@
 services:
   # ─────────────────────────────────────────────────────────────────────────
-  # PostgreSQL Database
-  # ─────────────────────────────────────────────────────────────────────────
-  postgres:
-    image: postgres:16-alpine
-    container_name: blurz_postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-blurz}
-      POSTGRES_DB: ${POSTGRES_DB:-smart-attendance}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-smart-attendance}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - blurz_network
-
-  # ─────────────────────────────────────────────────────────────────────────
-  # Redis (Broker + Cache)
-  # ─────────────────────────────────────────────────────────────────────────
-  redis:
-    image: redis:7-alpine
-    container_name: blurz_redis
-    restart: unless-stopped
-    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
-    volumes:
-      - redis_data:/data
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - blurz_network
-
-  # ─────────────────────────────────────────────────────────────────────────
   # Alembic Migrations (runs once then exits)
+  # Uses external Neon PostgreSQL — no local postgres container needed
   # ─────────────────────────────────────────────────────────────────────────
   migrate:
     build:
@@ -53,9 +11,6 @@ services:
     command: ["alembic", "upgrade", "head"]
     env_file:
       - ./server/.env.docker
-    depends_on:
-      postgres:
-        condition: service_healthy
     networks:
       - blurz_network
     restart: "no"
@@ -74,10 +29,6 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
       migrate:
         condition: service_completed_successfully
     healthcheck:
@@ -91,6 +42,7 @@ services:
 
   # ─────────────────────────────────────────────────────────────────────────
   # Celery Worker
+  # Uses external Upstash Redis as broker
   # ─────────────────────────────────────────────────────────────────────────
   celery_worker:
     build:
@@ -101,11 +53,6 @@ services:
     command: ["celery", "-A", "core.services.celery.celery_config", "worker", "--loglevel=info", "--concurrency=2"]
     env_file:
       - ./server/.env.docker
-    depends_on:
-      redis:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
     networks:
       - blurz_network
 
@@ -121,9 +68,6 @@ services:
   #   command: ["celery", "-A", "core.services.celery.celery_config", "beat", "--loglevel=info"]
   #   env_file:
   #     - ./server/.env.docker
-  #   depends_on:
-  #     - redis
-  #     - postgres
   #   networks:
   #     - blurz_network
 
@@ -142,17 +86,9 @@ services:
     ports:
       - "5555:5555"
     depends_on:
-      - redis
       - celery_worker
     networks:
       - blurz_network
-
-# ─────────────────────────────────────────────────────────────────────────
-# Named Volumes
-# ─────────────────────────────────────────────────────────────────────────
-volumes:
-  postgres_data:
-  redis_data:
 
 # ─────────────────────────────────────────────────────────────────────────
 # Network
