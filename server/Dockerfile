@@ -1,6 +1,7 @@
 # ── Stage 1: Build ──────────────────────────────────────────────────────────
 FROM python:3.11-slim AS builder
 
+ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
 
 # Install build deps
@@ -16,6 +17,10 @@ RUN pip install --upgrade pip && \
 
 # ── Stage 2: Production ───────────────────────────────────────────────────────
 FROM python:3.11-slim
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
