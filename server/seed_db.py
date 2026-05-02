@@ -6,10 +6,7 @@ from core.db.models import (
     Department, Section, Course, CourseProfessor
 )
 from core.auth.schema import UserRole
-from passlib.context import CryptContext
-
-# Set up password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from core.security import generate_hashed_password
 
 async def seed_database():
     async with async_session() as session:
@@ -22,7 +19,7 @@ async def seed_database():
             admin = SystemAdmin(
                 email=admin_email,
                 full_name="System Administrator",
-                hashed_password=pwd_context.hash("Admin123!")
+                hashed_password=generate_hashed_password("Admin123!")
             )
             session.add(admin)
             print("✅ Created System Admin: admin@blurz.com / Admin123!")
@@ -53,7 +50,7 @@ async def seed_database():
                 id_card="CARD_P12345",
                 full_name="Dr. John Doe",
                 email=prof_email,
-                hashed_password=pwd_context.hash("Prof123!"),
+                hashed_password=generate_hashed_password("Prof123!"),
                 role=UserRole.professor,
                 is_active=True
             )
@@ -86,7 +83,7 @@ async def seed_database():
                 id_card="CARD_S12345",
                 full_name="Alice Smith",
                 email=student_email,
-                hashed_password=pwd_context.hash("Student123!"),
+                hashed_password=generate_hashed_password("Student123!"),
                 role=UserRole.student,
                 is_active=True
             )
